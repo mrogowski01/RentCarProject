@@ -77,31 +77,31 @@ public class AuthController {
 
     // Create new user's account
     Users user = new Users(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
-
-    Set<String> strRoles = signUpRequest.getRole();
-    Set<Role> roles = new HashSet<>();
-
-    if (strRoles == null) {
-      Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found null uesr."));
-      roles.add(userRole);
-    } else {
-      strRoles.forEach(role -> {
-        if (role.equals("admin")) {
-
-          Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                  .orElseThrow(() -> new RuntimeException("Error: Role is not found admin."));
-          roles.add(adminRole);
-        }
-        else{
-          Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                  .orElseThrow(() -> new RuntimeException("Error: Role is not found user."));
-          roles.add(userRole);
-        }
-      });
-    }
-
-    user.setRoles(roles);
+//
+//    Set<String> strRoles = signUpRequest.getRole();
+//    Set<Role> roles = new HashSet<>();
+//
+//    if (strRoles == null) {
+//      Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+//              .orElseThrow(() -> new RuntimeException("Error: Role is not found null uesr."));
+//      roles.add(userRole);
+//    } else {
+//      strRoles.forEach(role -> {
+//        if (role.equals("admin")) {
+//
+//          Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+//                  .orElseThrow(() -> new RuntimeException("Error: Role is not found admin."));
+//          roles.add(adminRole);
+//        }
+//        else{
+//          Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+//                  .orElseThrow(() -> new RuntimeException("Error: Role is not found user."));
+//          roles.add(userRole);
+//        }
+//      });
+//    }
+//
+//    user.setRoles(roles);
     userRepository.save(user);
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
