@@ -15,7 +15,7 @@ public class Offer {
     private Long idOffer;
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "id_car", nullable = false)
     private Car car;
 
     private Boolean isAvailable;
