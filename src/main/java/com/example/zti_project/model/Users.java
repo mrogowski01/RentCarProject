@@ -1,17 +1,21 @@
 package com.example.zti_project.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
+@Entity(name = "users")
+@Table(name = "users", schema = "public", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username")
+})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Users {
+public class Users implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -22,13 +26,11 @@ public class Users {
   @NonNull
   private String password;
 
+  @Getter
   @Setter
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
-  public Set<Role> getRoles() {
-    return roles;
-  }
 }
 

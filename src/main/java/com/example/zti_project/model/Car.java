@@ -21,4 +21,7 @@ public class Car {
     private String gear_type;
     private Long price;
     private String imageurl;
+
+    @Column(name = "id_user")
+    private Long idUser;
 }

@@ -9,6 +9,6 @@ import com.example.zti_project.model.ERole;
 import com.example.zti_project.model.Role;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface RoleRepository extends JpaRepository<Role, Integer> {
   Optional<Role> findByName(ERole name);
 }
