@@ -19,7 +19,6 @@ public class Car {
     private String fuel_type;
     private String color;
     private String gear_type;
-    private Long price;
     private String imageurl;
 
     @Column(name = "id_user")
