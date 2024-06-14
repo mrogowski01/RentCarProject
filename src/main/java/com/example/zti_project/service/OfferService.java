@@ -60,6 +60,16 @@ public class OfferService {
                 .collect(Collectors.toList());
     }
 
+    public List<Offer> getAllOffersWithCars() {
+        return offerRepository.findAll().stream()
+                .map(offer -> {
+                    Car car = carRepository.findById(offer.getCarId()).orElse(null);
+                    offer.setCarDetails(car);
+                    return offer;
+                })
+                .collect(Collectors.toList());
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(OfferService.class);
 
     public Offer updateOffer(Long id, Offer offerDetails) {

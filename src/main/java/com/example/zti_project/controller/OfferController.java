@@ -45,7 +45,7 @@ public class OfferController {
 
     @GetMapping
     public ResponseEntity<List<Offer>> getAllOffers() {
-        List<Offer> offers = offerService.getAllOffers();
+        List<Offer> offers = offerService.getAllOffersWithCars();
         return ResponseEntity.ok(offers);
     }
 

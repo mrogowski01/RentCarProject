@@ -1,4 +1,32 @@
 package com.example.zti_project.model;
 
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDate;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Reservation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idReservation;
+
+    @Column(name = "id_offer", nullable = false)
+    private Long idOffer;
+
+    @Column(name = "id_user")
+    private Long idUser;
+
+    private LocalDate dateFrom;
+    private LocalDate dateleTo;
+
+    @Transient
+    private Offer offerDetails;  // Transient field to hold car details
+
+    public void setOfferDetails(Offer offerDetails) {
+        this.offerDetails = offerDetails;
+    }
 }
