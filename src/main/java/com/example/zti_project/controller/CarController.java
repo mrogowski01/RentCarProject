@@ -3,6 +3,7 @@ package com.example.zti_project.controller;
 import com.example.zti_project.model.Car;
 import com.example.zti_project.service.CarService;
 import com.example.zti_project.service.OfferService;
+import com.example.zti_project.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,9 @@ public class CarController {
 
     @Autowired
     private OfferService offerService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @GetMapping
     public ResponseEntity<List<Car>> getAllCars() {
@@ -72,13 +76,13 @@ public class CarController {
     public ResponseEntity<Void> deleteCar(@PathVariable Long id) {
         Optional<Car> optionalCar = Optional.ofNullable(carService.findById(id));
         if (optionalCar.isPresent()) {
-            // Usuwamy oferty powiązane z samochodem
+            reservationService.deleteReservationsByCarId(id);
             offerService.deleteOffersByCarId(id);
-            // Usuwamy samochód
             carService.deleteById(id);
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
 }

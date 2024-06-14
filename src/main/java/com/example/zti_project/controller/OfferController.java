@@ -3,6 +3,7 @@ package com.example.zti_project.controller;
 import com.example.zti_project.model.Car;
 import com.example.zti_project.model.Offer;
 import com.example.zti_project.service.OfferService;
+import com.example.zti_project.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +20,8 @@ public class OfferController {
 
     @Autowired
     private OfferService offerService;
+    @Autowired
+    private ReservationService reservationService;
 
     @PostMapping
     public ResponseEntity<Offer> createOffer(@RequestBody Offer offer) {
@@ -72,6 +75,7 @@ public class OfferController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOffer(@PathVariable Long id) {
+        reservationService.deleteReservationsByOfferId(id);
         if (offerService.deleteOffer(id)) {
             return ResponseEntity.ok().build();
         } else {

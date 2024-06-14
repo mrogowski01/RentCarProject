@@ -21,7 +21,7 @@ public class Reservation {
     private Long idUser;
 
     private LocalDate dateFrom;
-    private LocalDate dateleTo;
+    private LocalDate dateTo;
 
     @Transient
     private Offer offerDetails;  // Transient field to hold car details
