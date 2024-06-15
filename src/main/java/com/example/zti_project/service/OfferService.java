@@ -1,5 +1,6 @@
 package com.example.zti_project.service;
 
+import com.example.zti_project.exceptions.InvalidOfferDateException;
 import com.example.zti_project.model.Car;
 import com.example.zti_project.model.Offer;
 import com.example.zti_project.repository.CarRepository;
@@ -24,6 +25,9 @@ public class OfferService {
     private CarRepository carRepository;
 
     public Offer createOffer(Offer offer) {
+        if (offer.getAvailableFrom().isAfter(offer.getAvailableTo())) {
+            throw new InvalidOfferDateException("Offer start date must be before end date.");
+        }
         return offerRepository.save(offer);
     }
 

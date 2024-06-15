@@ -1,5 +1,7 @@
 package com.example.zti_project.controller;
 
+import com.example.zti_project.exceptions.InvalidReservationDateException;
+import com.example.zti_project.exceptions.OfferNotFoundException;
 import com.example.zti_project.model.Offer;
 import com.example.zti_project.model.Reservation;
 import com.example.zti_project.service.ReservationService;
@@ -21,10 +23,17 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @PostMapping
-    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
-        Reservation createdReservation = reservationService.createReservation(reservation);
-        return ResponseEntity.ok(createdReservation);
+    public ResponseEntity<?> createReservation(@RequestBody Reservation reservation) {
+        try {
+            Reservation createdReservation = reservationService.createReservation(reservation);
+            return ResponseEntity.ok(createdReservation);
+        } catch (OfferNotFoundException | InvalidReservationDateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error creating reservation: " + e.getMessage());
+        }
     }
+
 
     @GetMapping("/{idReservation}")
     public ResponseEntity<Reservation> getReservationById(@PathVariable Long idReservation) {

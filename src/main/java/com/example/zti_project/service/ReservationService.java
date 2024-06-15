@@ -1,5 +1,7 @@
 package com.example.zti_project.service;
 
+import com.example.zti_project.exceptions.InvalidReservationDateException;
+import com.example.zti_project.exceptions.OfferNotFoundException;
 import com.example.zti_project.model.Car;
 import com.example.zti_project.model.Offer;
 import com.example.zti_project.model.Reservation;
@@ -26,11 +28,41 @@ public class ReservationService {
     private CarRepository carRepository;
 
     public Reservation createReservation(Reservation reservation) {
+        validateReservationDates(reservation);
+
         return reservationRepository.save(reservation);
+    }
+
+    private void validateReservationDates(Reservation reservation) {
+        Optional<Offer> offer = offerRepository.findById(reservation.getIdOffer());
+        if (offer.isEmpty()) {
+            throw new OfferNotFoundException("Offer not found for id: " + reservation.getIdOffer());
+        }
+
+        if (reservation.getDateTo().isBefore(reservation.getDateFrom())) {
+            throw new InvalidReservationDateException("dateTo must be before dateTo");
+        }
+
+        if (reservation.getDateTo().isAfter(offer.get().getAvailableTo()) &&
+                reservation.getDateFrom().isBefore(offer.get().getAvailableFrom())) {
+            throw new InvalidReservationDateException("Date of reservation must be in range of car availability");
+        }
+
+        if (reservation.getDateFrom().isBefore(offer.get().getAvailableFrom())) {
+            throw new InvalidReservationDateException("dateFrom must be after offer's availableFrom: " + offer.get().getAvailableFrom());
+        }
+
+        if (reservation.getDateTo().isAfter(offer.get().getAvailableTo())) {
+            throw new InvalidReservationDateException("dateTo must be before offer's availableTo: " + offer.get().getAvailableTo());
+        }
     }
 
     public Optional<Reservation> getReservationById(Long idReservation) {
         return reservationRepository.findById(idReservation);
+    }
+
+    public Optional<Offer> getOfferByIdOffer(Long idOffer) {
+        return offerRepository.findById(idOffer);
     }
 
     public void deleteReservation(Long idReservation) {

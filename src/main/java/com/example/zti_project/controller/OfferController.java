@@ -1,5 +1,6 @@
 package com.example.zti_project.controller;
 
+import com.example.zti_project.exceptions.InvalidOfferDateException;
 import com.example.zti_project.model.Car;
 import com.example.zti_project.model.Offer;
 import com.example.zti_project.service.OfferService;
@@ -24,9 +25,13 @@ public class OfferController {
     private ReservationService reservationService;
 
     @PostMapping
-    public ResponseEntity<Offer> createOffer(@RequestBody Offer offer) {
-        Offer createdOffer = offerService.createOffer(offer);
-        return ResponseEntity.ok(createdOffer);
+    public ResponseEntity<?> createOffer(@RequestBody Offer offer) {
+        try {
+            Offer createdOffer = offerService.createOffer(offer);
+            return ResponseEntity.ok(createdOffer);
+        } catch (InvalidOfferDateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
