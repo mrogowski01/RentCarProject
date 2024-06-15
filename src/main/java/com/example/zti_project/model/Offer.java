@@ -2,6 +2,7 @@ package com.example.zti_project.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
 
@@ -20,10 +21,13 @@ public class Offer {
     @Column(name = "id_user")
     private Long idUser;
 
-//    private Boolean isAvailable;
     private Long price;
+
     private LocalDate availableFrom;
+
     private LocalDate availableTo;
+
+    private boolean reserved = false;
 
     @Transient
     private Car carDetails;  // Transient field to hold car details
@@ -35,4 +39,8 @@ public class Offer {
     public Long getIdCar() {
         return carId;
     }
+
+//    public void setIsReserved(boolean b) {
+//        isReserved = b;
+//    }
 }

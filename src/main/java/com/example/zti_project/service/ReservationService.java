@@ -10,6 +10,7 @@ import com.example.zti_project.repository.OfferRepository;
 import com.example.zti_project.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,8 +28,22 @@ public class ReservationService {
     @Autowired
     private CarRepository carRepository;
 
+    @Transactional
     public Reservation createReservation(Reservation reservation) {
         validateReservationDates(reservation);
+
+        Optional<Offer> offerOptional = offerRepository.findById(reservation.getIdOffer());
+        if (offerOptional.isEmpty()) {
+            throw new OfferNotFoundException("Offer not found for id: " + reservation.getIdOffer());
+        }
+
+        Offer offer = offerOptional.get();
+        if (offer.isReserved()) {
+            throw new InvalidReservationDateException("Offer is already reserved.");
+        }
+
+        offer.setReserved(true);
+        offerRepository.save(offer);
 
         return reservationRepository.save(reservation);
     }
@@ -100,5 +115,25 @@ public class ReservationService {
         List<Reservation> reservations = reservationRepository.findByIdOffer(offerId);
         reservationRepository.deleteAll(reservations);
 
+    }
+
+    @Transactional
+    public void deleteReservationAndUpdateOffer(Long idReservation) {
+        Optional<Reservation> reservationOptional = reservationRepository.findById(idReservation);
+        if (reservationOptional.isEmpty()) {
+            throw new RuntimeException("Reservation not found for id: " + idReservation);
+        }
+
+        Reservation reservation = reservationOptional.get();
+        Optional<Offer> offerOptional = offerRepository.findById(reservation.getIdOffer());
+        if (offerOptional.isEmpty()) {
+            throw new OfferNotFoundException("Offer not found for id: " + reservation.getIdOffer());
+        }
+
+        Offer offer = offerOptional.get();
+        offer.setReserved(false);
+        offerRepository.save(offer);
+
+        reservationRepository.deleteById(idReservation);
     }
 }

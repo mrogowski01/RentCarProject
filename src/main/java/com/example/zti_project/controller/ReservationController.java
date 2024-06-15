@@ -42,9 +42,13 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{idReservation}")
-    public ResponseEntity<Void> deleteReservation(@PathVariable Long idReservation) {
-        reservationService.deleteReservation(idReservation);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> deleteReservation(@PathVariable Long idReservation) {
+        try {
+            reservationService.deleteReservationAndUpdateOffer(idReservation);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error deleting reservation: " + e.getMessage());
+        }
     }
 
     @GetMapping("/user/{idUser}")
