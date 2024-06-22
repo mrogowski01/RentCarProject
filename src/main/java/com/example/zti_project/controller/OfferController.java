@@ -1,6 +1,7 @@
 package com.example.zti_project.controller;
 
 import com.example.zti_project.exceptions.InvalidOfferDateException;
+import com.example.zti_project.exceptions.InvalidOfferDateExceptionEdit;
 import com.example.zti_project.model.Car;
 import com.example.zti_project.model.Offer;
 import com.example.zti_project.service.OfferService;
@@ -68,13 +69,16 @@ public class OfferController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Offer> updateOffer(@PathVariable Long id, @RequestBody Offer offerDetails) {
-        System.out.println(id);
-        Offer updatedOffer = offerService.updateOffer(id, offerDetails);
-        if (updatedOffer != null) {
-            return ResponseEntity.ok(updatedOffer);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> updateOffer(@PathVariable Long id, @RequestBody Offer offerDetails) {
+        try {
+            Offer updatedOffer = offerService.updateOffer(id, offerDetails);
+            if (updatedOffer != null) {
+                return ResponseEntity.ok(updatedOffer);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (InvalidOfferDateExceptionEdit e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

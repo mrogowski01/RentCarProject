@@ -1,6 +1,7 @@
 package com.example.zti_project.service;
 
 import com.example.zti_project.exceptions.InvalidOfferDateException;
+import com.example.zti_project.exceptions.InvalidOfferDateExceptionEdit;
 import com.example.zti_project.model.Car;
 import com.example.zti_project.model.Offer;
 import com.example.zti_project.repository.CarRepository;
@@ -80,23 +81,14 @@ public class OfferService {
         Optional<Offer> optionalOffer = offerRepository.findByIdOffer(id);
         if (optionalOffer.isPresent()) {
             Offer offer = optionalOffer.get();
-            Long idCar = offerDetails.getIdCar();
-            offer.setCarId(idCar);
+            if (offerDetails.getAvailableFrom().isAfter(offerDetails.getAvailableTo())) {
+                throw new InvalidOfferDateExceptionEdit("Offer start date must be before end date.");
+            }
+            offer.setCarId(offerDetails.getIdCar());
             offer.setIdUser(offerDetails.getIdUser());
             offer.setPrice(offerDetails.getPrice());
             offer.setAvailableFrom(offerDetails.getAvailableFrom());
             offer.setAvailableTo(offerDetails.getAvailableTo());
-            logger.info("Updating offer with id {} and car {}", id, idCar);
-//
-//            // Pobierz obiekt Car na podstawie idCar
-//            Car car = carRepository.findById(idCar).orElse(null);
-//            if (car != null) {
-//                offer.setCarDetails(car); // Ustawienie szczegółów samochodu w ofercie
-//            } else {
-//                // Obsłuż sytuację, gdy car jest null, np. rzucenie wyjątku lub ustawienie null
-//                offer.setCarDetails(null);
-//            }
-
             return offerRepository.save(offer);
         }
         return null;
