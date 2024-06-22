@@ -95,29 +95,6 @@ public class OfferService {
     }
 
 
-//    public Offer updateOffer(Long id, Offer offerDetails) {
-//        Optional<Offer> optionalOffer = offerRepository.findById(id);
-//        if (optionalOffer.isPresent()) {
-//            Offer offer = optionalOffer.get();
-//            Long idCar = offerDetails.getCar();
-//            // Wczytanie obiektu Car na podstawie idCar
-//            Car car = carRepository.findById(idCar).orElse(null);
-//            if (car != null) {
-//                offer.setCar(idCar);
-//                offer.setIdUser(offerDetails.getIdUser());
-//                offer.setPrice(offerDetails.getPrice());
-//                offer.setAvailableFrom(offerDetails.getAvailableFrom());
-//                offer.setAvailableTo(offerDetails.getAvailableTo());
-//                System.out.println(idCar);
-//                System.out.println(car);
-//                offer.setCarDetails(car); // Ustawienie szczegółów samochodu w ofercie
-//                return offerRepository.save(offer);
-//            } else {
-//                throw new RuntimeException("Car with id " + idCar + " not found!");
-//            }
-//        }
-//        return null;
-//    }
 
     public boolean deleteOffer(Long id) {
         Optional<Offer> optionalOffer = offerRepository.findById(id);

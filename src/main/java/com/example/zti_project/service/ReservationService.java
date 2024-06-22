@@ -55,7 +55,7 @@ public class ReservationService {
         }
 
         if (reservation.getDateTo().isBefore(reservation.getDateFrom())) {
-            throw new InvalidReservationDateException("dateTo must be before dateTo");
+            throw new InvalidReservationDateException("dateTo must be before dateFrom");
         }
 
         if (reservation.getDateTo().isAfter(offer.get().getAvailableTo()) &&
