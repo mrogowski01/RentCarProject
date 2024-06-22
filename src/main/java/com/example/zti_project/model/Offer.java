@@ -30,7 +30,7 @@ public class Offer {
     private boolean reserved = false;
 
     @Transient
-    private Car carDetails;  // Transient field to hold car details
+    private Car carDetails;
 
     public void setCarDetails(Car carDetails) {
         this.carDetails = carDetails;
@@ -40,7 +40,4 @@ public class Offer {
         return carId;
     }
 
-//    public void setIsReserved(boolean b) {
-//        isReserved = b;
-//    }
 }

@@ -24,7 +24,7 @@ public class Reservation {
     private LocalDate dateTo;
 
     @Transient
-    private Offer offerDetails;  // Transient field to hold car details
+    private Offer offerDetails;
 
     public void setOfferDetails(Offer offerDetails) {
         this.offerDetails = offerDetails;
